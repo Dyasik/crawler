@@ -13,13 +13,15 @@ let browser
 async function main() {
     console.log(`\n${getTimestamp()} CHECK STARTED\n`)
 
+    const {HEADLESS, BROWSER_PATH} = process.env
+
     browser = await puppeteer.launch({
         defaultViewport: {
             width: 1300,
             height: 900
         },
-        // headless: false,
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        headless: HEADLESS === 'true',
+        executablePath: BROWSER_PATH,
     });
 
     for (const shopName of Object.getOwnPropertyNames(shops)) {
