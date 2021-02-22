@@ -18,7 +18,7 @@ async function main() {
             width: 1300,
             height: 900
         },
-        headless: false,
+        // headless: false,
         executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
     });
 
