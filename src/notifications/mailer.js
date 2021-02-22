@@ -1,20 +1,20 @@
 const nodemailer = require('nodemailer')
 
-const {EmailLogin, EmailPass, EmailTo} = require('../../conf')
+const {EMAIL_LOGIN, EMAIL_PASS, EMAIL_TO} = process.env
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: EmailLogin,
-        pass: EmailPass,
+        user: EMAIL_LOGIN,
+        pass: EMAIL_PASS,
     },
 })
 
 module.exports = function sendEmail(subject, text) {
     return transport.sendMail({
-        from: `Dyasik's Crawler <${EmailLogin}>`,
+        from: `Dyasik's Crawler <${EMAIL_LOGIN}>`,
         subject,
         text,
-        to: EmailTo,
+        to: EMAIL_TO,
     })
 }

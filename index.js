@@ -1,15 +1,12 @@
+// injects env vars from `.env` file to `process.env` object
+// IF not run at Heroku (that is, only for local runs)
+if (!process.env.HEROKU) {
+    require('dotenv').config()
+}
+
 const puppeteer = require('puppeteer')
 const {wait, getTimestamp} = require('./src/utils')
 const shops = require('./src/shops')
-
-let config
-
-try {
-    config = require('./conf')
-} catch {
-    console.error('File `conf.js` not found')
-    Process.exit(0)
-}
 
 let browser
 

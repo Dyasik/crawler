@@ -1,7 +1,5 @@
 const puppeteer = require('puppeteer');
 
-const {TimeoutMin, TimeoutMax} = require('../conf')
-
 const MODELS = [
     '2060',
     '2070',
@@ -51,10 +49,12 @@ async function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, waitTime))
 }
 
-const WAIT_TIME_DIFF = TimeoutMax - TimeoutMin
+const WAIT_TIME_MIN = Number(process.env.TIMEOUT_MIN)
+const WAIT_TIME_MAX = Number(process.env.TIMEOUT_MAX)
+const WAIT_TIME_DIFF = WAIT_TIME_MAX - WAIT_TIME_MIN
 
 function getWaitingTime() {
-    return Math.round(TimeoutMin + Math.random() * WAIT_TIME_DIFF)
+    return Math.round(WAIT_TIME_MIN + Math.random() * WAIT_TIME_DIFF)
 }
 
 function getTimestamp() {
