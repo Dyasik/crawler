@@ -22,10 +22,10 @@ async function main() {
         },
         headless: HEADLESS === 'true',
         executablePath: BROWSER_PATH,
-        args: process.env.HEROKU ? [
+        args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
-        ] : [],
+        ],
     });
 
     for (const shopName of Object.getOwnPropertyNames(shops)) {
