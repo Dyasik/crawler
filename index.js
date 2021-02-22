@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer')
-const Process = require('process')
 const {wait, getTimestamp} = require('./src/utils')
 const shops = require('./src/shops')
 
@@ -69,7 +68,7 @@ async function stop() {
 
 async function stopAndExit() {
     await stop()
-    Process.exit(0)
+    process.exit(0)
 }
 
 mainLoop()
