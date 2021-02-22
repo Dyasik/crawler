@@ -4,8 +4,7 @@ if (!process.env.HEROKU) {
     require('dotenv').config()
 }
 
-const puppeteer = require('puppeteer')
-const {wait, getTimestamp} = require('./src/utils')
+const {wait, getTimestamp, getBrowser} = require('./src/utils')
 const shops = require('./src/shops')
 
 let browser
@@ -13,20 +12,7 @@ let browser
 async function main() {
     console.log(`\n${getTimestamp()} CHECK STARTED\n`)
 
-    const {HEADLESS, BROWSER_PATH} = process.env
-
-    browser = await puppeteer.launch({
-        defaultViewport: {
-            width: 1300,
-            height: 900
-        },
-        headless: HEADLESS === 'true',
-        executablePath: BROWSER_PATH,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ],
-    });
+    browser = await getBrowser()
 
     for (const shopName of Object.getOwnPropertyNames(shops)) {
         console.log(`Checking ${shopName}...`)

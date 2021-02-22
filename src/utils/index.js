@@ -69,4 +69,5 @@ module.exports = {
     getTextContent,
     wait,
     getTimestamp,
+    getBrowser: require('./getBrowser'),
 }
