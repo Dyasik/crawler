@@ -22,6 +22,10 @@ async function main() {
         },
         headless: HEADLESS === 'true',
         executablePath: BROWSER_PATH,
+        args: process.env.HEROKU ? [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ] : [],
     });
 
     for (const shopName of Object.getOwnPropertyNames(shops)) {
@@ -71,7 +75,10 @@ async function stopAndExit() {
 }
 
 mainLoop()
-    .catch(err => console.warn('❌\tError in the main loop, terminating:', err))
+    .catch(err => {
+        console.warn('❌\tError in the main loop, terminating:', err)
+        process.exit(0)
+    })
 
 process.on('SIGINT', stopAndExit)
 process.on('SIGQUIT', stopAndExit)
