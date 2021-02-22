@@ -27,7 +27,7 @@ function isNameInteresting(name) {
  * @returns {boolean}
  */
 function isPriceInteresting(price) {
-    return price <= 50_000
+    return price <= (Number(process.env.MAX_PRICE) || 50_000)
 }
 
 /**
