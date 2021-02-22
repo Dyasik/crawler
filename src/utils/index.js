@@ -43,10 +43,13 @@ async function getTextContent(page, el) {
  * @param {number} [ms]
  * @returns {Promise<void>}
  */
-async function wait(ms) {
-    const waitTime = ms === undefined ? getWaitingTime() : ms
+async function wait(ms = getWaitingTime()) {
+    const waitResultDate = new Date(Date.now() + ms)
+    const waitMinutes = Math.round(ms / 1000 / 60)
 
-    return new Promise(resolve => setTimeout(resolve, waitTime))
+    console.log(`Waiting till ${getTimestamp(waitResultDate)} (for ~${waitMinutes} min)`)
+
+    return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 const WAIT_TIME_MIN = Number(process.env.TIMEOUT_MIN)
@@ -57,8 +60,12 @@ function getWaitingTime() {
     return Math.round(WAIT_TIME_MIN + Math.random() * WAIT_TIME_DIFF)
 }
 
-function getTimestamp() {
-    const [, m, d, , t] = new Date().toString().split(' ')
+/**
+ * @param {Date} [date]
+ * @returns {string}
+ */
+function getTimestamp(date = new Date()) {
+    const [, m, d, , t] = date.toString().split(' ')
 
     return `[${m} ${d} ${t}]`
 }

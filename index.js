@@ -32,6 +32,7 @@ async function main() {
 async function mainLoop() {
     try {
         await main()
+        console.log(`${getTimestamp()} CHECK FINISHED`)
     } catch (e) {
         console.warn('❌\tError in main loop:', e)
     }
