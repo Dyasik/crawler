@@ -3,6 +3,15 @@ const Process = require('process')
 const {wait, getTimestamp} = require('./src/utils')
 const shops = require('./src/shops')
 
+let config
+
+try {
+    config = require('./conf')
+} catch {
+    console.error('File `conf.js` not found')
+    Process.exit(0)
+}
+
 let browser
 
 async function main() {

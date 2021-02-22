@@ -10,6 +10,9 @@ module.exports = {
     get EmailPass() {
         return ''
     },
+    get EmailTo() {
+        return '' // CSV
+    },
     get TimeoutMin() {
         return NaN
     },
