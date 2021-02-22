@@ -8,7 +8,6 @@ module.exports = async function getBrowser() {
             width: 1300,
             height: 900
         },
-        headless: HEADLESS === 'true',
         executablePath: BROWSER_PATH,
         args: [
             '--no-sandbox',
