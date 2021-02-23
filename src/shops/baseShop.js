@@ -14,6 +14,13 @@ module.exports = class ShopProcessor {
     /** @private */
     itemPriceSelector = ''
 
+    // When we cannot navigate to a shop page, we suggest being blocked by its firewall.
+    // In this case, we try to skip checking this shop for 1 or more subsequent checks.
+    /** @private */
+    skipTimesInitial = 0
+    /** @private */
+    skipTimesLeft = 0
+
     constructor(name, url, itemCardSelector, itemNameSelector, itemPriceSelector, parsePrice) {
         this.name = name
         this.url = url
@@ -40,6 +47,14 @@ module.exports = class ShopProcessor {
      * @returns {Promise<boolean>} isSomethingFound
      */
     async run(browser) {
+        if (this.skipTimesLeft) {
+            this.skipTimesLeft--
+
+            console.log(`ℹ️\t Skipping shop (${this.skipTimesLeft} skips will follow)`)
+
+            return false
+        }
+
         /**
          * @var {puppeteer.Page}
          */
@@ -51,7 +66,7 @@ module.exports = class ShopProcessor {
             page = await browser.newPage();
 
             await page.goto(this.url, {
-                waitUntil: 'networkidle2'
+                waitUntil: ['domcontentloaded', 'networkidle2']
             });
 
             const items = await page.$$(this.itemCardSelector)
@@ -82,7 +97,12 @@ module.exports = class ShopProcessor {
                 isSomethingFound = true
                 notify(name, price, this.url)
             }
+
+            this.skipTimesInitial = 0
         } catch (e) {
+            this.skipTimesInitial++
+            this.skipTimesLeft = this.skipTimesInitial
+
             console.warn(`⚠️\t${this.name} error:`, e)
         } finally {
             page?.close()
