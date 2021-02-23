@@ -66,7 +66,8 @@ module.exports = class ShopProcessor {
             page = await browser.newPage();
 
             await page.goto(this.url, {
-                waitUntil: ['domcontentloaded', 'networkidle2']
+                waitUntil: ['domcontentloaded', 'networkidle2'],
+                timeout: 1000 * 60, // waiting not more than 1 min for the page to load
             });
 
             const items = await page.$$(this.itemCardSelector)
