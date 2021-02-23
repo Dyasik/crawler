@@ -3,4 +3,5 @@ module.exports = [
     require('./dns'),
     require('./citilink'),
     require('./nix'),
+    require('./ogo'),
 ]
