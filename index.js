@@ -9,6 +9,9 @@ const shops = require('./src/shops')
 
 let browser
 
+let checksCount = 0
+let findsCount = 0
+
 async function main() {
     console.log(`\n${getTimestamp()} CHECK STARTED\n`)
 
@@ -21,13 +24,19 @@ async function main() {
 
         const isAnythingFound = await shop.run(browser)
 
-        if (!isAnythingFound) {
+        if (isAnythingFound) {
+            findsCount++
+        } else {
             console.log(`ℹ️\tNothing found at ${name}`)
         }
     }
 
     await browser.close()
     browser = null
+
+    checksCount++
+
+    console.log(`\n📈\tGot ${findsCount} finds in ${checksCount} check cycles\n`)
 }
 
 async function mainLoop() {
