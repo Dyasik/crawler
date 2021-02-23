@@ -1,5 +1,5 @@
-module.exports = {
-    Regard: require('./regard'),
-    DNS: require('./dns'),
-    Citilink: require('./citilink'),
-}
+module.exports = [
+    require('./regard'),
+    require('./dns'),
+    require('./citilink'),
+]

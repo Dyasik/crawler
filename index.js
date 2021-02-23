@@ -14,14 +14,15 @@ async function main() {
 
     browser = await getBrowser()
 
-    for (const shopName of Object.getOwnPropertyNames(shops)) {
-        console.log(`Checking ${shopName}...`)
+    for (const shop of shops) {
+        const {name} = shop
 
-        const checkShop = shops[shopName]
-        const isAnythingFound = await checkShop(browser)
+        console.log(`Checking ${name}...`)
+
+        const isAnythingFound = await shop.run(browser)
 
         if (!isAnythingFound) {
-            console.log(`ℹ️\tNothing found at ${shopName}`)
+            console.log(`ℹ️\tNothing found at ${name}`)
         }
     }
 
