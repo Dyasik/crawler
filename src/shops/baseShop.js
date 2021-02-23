@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const {getTextContent, isNameInteresting, isPriceInteresting} = require('../utils')
+const {getTextContent, isNameInteresting, isPriceInteresting, debug} = require('../utils')
 const notify = require('../notifications')
 
 module.exports = class ShopProcessor {
@@ -70,18 +70,25 @@ module.exports = class ShopProcessor {
                 timeout: 1000 * 60, // waiting not more than 1 min for the page to load
             });
 
+            debug('Loaded the page')
+
             const items = await page.$$(this.itemCardSelector)
+
+            debug(`Found ${items.length} items`)
 
             for (const item of items) {
                 const nameEl = await item.$(this.itemNameSelector)
-                const priceEl = await item.$(this.itemPriceSelector)
 
                 const name = await getTextContent(page, nameEl)
 
+                debug(`Checking item ${name}`)
+
                 if (!isNameInteresting(name)) {
+                    debug(`Item ${name} is not interesting`)
                     continue
                 }
 
+                const priceEl = await item.$(this.itemPriceSelector)
                 const rawPrice = await getTextContent(page, priceEl)
 
                 if (!rawPrice) {
@@ -90,6 +97,8 @@ module.exports = class ShopProcessor {
                 }
 
                 const price = this.parsePrice(rawPrice)
+
+                debug(`The price is ${price}`)
 
                 if (!isPriceInteresting(price)) {
                     continue

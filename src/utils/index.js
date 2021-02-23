@@ -77,4 +77,5 @@ module.exports = {
     wait,
     getTimestamp,
     getBrowser: require('./getBrowser'),
+    debug: require('./logger'),
 }
