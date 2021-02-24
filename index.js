@@ -4,10 +4,11 @@ if (!process.env.HEROKU) {
     require('dotenv').config()
 }
 
-const {wait, getTimestamp, getBrowser} = require('./src/utils')
+const {getWaitingTime, getTimestamp, getBrowser} = require('./src/utils')
 const shops = require('./src/shops')
 
 let browser
+let loopTimeout
 
 let checksCount = 0
 let findsCount = 0
@@ -45,16 +46,19 @@ async function mainLoop() {
         console.log(`${getTimestamp()} CHECK FINISHED`)
     } catch (e) {
         console.warn('❌\tError in main loop:', e)
+    } finally {
+        const waitingTime = getWaitingTime()
+        const waitResultDate = new Date(Date.now() + waitingTime)
+        const waitMinutes = Math.round(waitingTime / 1000 / 60)
+
+        console.log(`Next check @ ${getTimestamp(waitResultDate)} (in ~${waitMinutes} mins)`)
+
+        loopTimeout = setTimeout(mainLoop, waitingTime)
     }
-
-    await wait()
-
-    return mainLoop()
 }
 
 async function stop() {
-    console.log('')
-    console.log('ℹ️\tStopping...')
+    console.log('\nℹ️\tStopping...')
 
     if (browser) {
         // Use temporary swap variable to avoid any race condition
@@ -62,6 +66,8 @@ async function stop() {
         browser = null
         await browserTemporary?.close()
     }
+
+    clearTimeout(loopTimeout)
 
     console.log('✅\tStopped!')
 }
@@ -73,7 +79,7 @@ async function stopAndExit() {
 
 mainLoop()
     .catch(err => {
-        console.warn('❌\tError in the main loop, terminating:', err)
+        console.warn('❌\tError in the first main loop, terminating:', err)
         process.exit(0)
     })
 

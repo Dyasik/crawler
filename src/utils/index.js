@@ -39,19 +39,6 @@ async function getTextContent(page, el) {
     return page.evaluate(e => e.innerText, el)
 }
 
-/**
- * @param {number} [ms]
- * @returns {Promise<void>}
- */
-async function wait(ms = getWaitingTime()) {
-    const waitResultDate = new Date(Date.now() + ms)
-    const waitMinutes = Math.round(ms / 1000 / 60)
-
-    console.log(`Waiting till ${getTimestamp(waitResultDate)} (for ~${waitMinutes} min)`)
-
-    return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 const WAIT_TIME_MIN = Number(process.env.TIMEOUT_MIN)
 const WAIT_TIME_MAX = Number(process.env.TIMEOUT_MAX)
 const WAIT_TIME_DIFF = WAIT_TIME_MAX - WAIT_TIME_MIN
@@ -74,7 +61,7 @@ module.exports = {
     isNameInteresting,
     isPriceInteresting,
     getTextContent,
-    wait,
+    getWaitingTime,
     getTimestamp,
     getBrowser: require('./getBrowser'),
     debug: require('./logger'),
